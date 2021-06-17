@@ -8,7 +8,11 @@ var uploadfile = (req, res, next) => {
       cb(null, Date.now() + "-" + file.originalname);
     },
   });
-  const upload = multer({ storage: storage }).array("files", 100);
+  var imagefilter = (req, file, cb) => {
+    console.log(file);
+    cb(null, file.originalname !== "e.jpg");
+  };
+  const upload = multer({ storage: storage, fileFilter: imagefilter }).array("files", 100);
   upload(req, res, (err) => {
     if (err) {
       res.status(401).send("Something went wrong!");
